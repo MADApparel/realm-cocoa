@@ -723,13 +723,11 @@ case "$COMMAND" in
         cd tightdb_objc
 
         REALM_SWIFT_VERSION=1.2 sh build.sh prelaunch-simulator
-        REALM_SWIFT_VERSION=1.2 sh build.sh test-ios-static
         REALM_SWIFT_VERSION=1.2 sh build.sh ios-static
         move_to_clean_dir build/ios/Realm.framework xcode-6
         rm -rf build
 
         REALM_SWIFT_VERSION=2.0 sh build.sh prelaunch-simulator
-        REALM_SWIFT_VERSION=2.0 sh build.sh test-ios-static
         REALM_SWIFT_VERSION=2.0 sh build.sh ios-static
         move_to_clean_dir build/ios/Realm.framework xcode-7
 
@@ -752,7 +750,7 @@ case "$COMMAND" in
 
     "package-osx")
         cd tightdb_objc
-        REALM_SWIFT_VERSION=2.0 sh build.sh test-osx
+        REALM_SWIFT_VERSION=2.0 sh build.sh osx
 
         cd build/DerivedData/Realm/Build/Products/Release
         zip --symlinks -r realm-framework-osx.zip Realm.framework
