@@ -260,6 +260,7 @@ static id RLMAutorelease(id value) {
     RLMSchema *customSchema = configuration.customSchema;
     bool dynamic = configuration.dynamic;
     bool readOnly = configuration.readOnly;
+    NSData *key = configuration.encryptionKey;
 
     // try to reuse existing realm first
     RLMRealm *realm = RLMGetThreadLocalCachedRealmForPath(path);
@@ -273,10 +274,12 @@ static id RLMAutorelease(id value) {
         if (realm->_dynamic != dynamic) {
             @throw RLMException(@"Realm at path already opened with different dynamic settings", @{@"path":realm.path});
         }
+        if (realm->_encryptionKey != key && (!key || ![realm->_encryptionKey isEqualToData:key])) {
+            @throw RLMException(@"Realm at path already opened with different encryption key", @{@"path":realm.path});
+        }
         return RLMAutorelease(realm);
     }
 
-    NSData *key = configuration.encryptionKey;
     realm = [[RLMRealm alloc] initWithPath:path key:key readOnly:readOnly inMemory:inMemory dynamic:dynamic error:error];
     if (error && *error) {
         return nil;
